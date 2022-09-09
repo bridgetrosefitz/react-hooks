@@ -3,13 +3,25 @@
 
 import React, { useEffect, useState } from 'react'
 
-function Greeting() {
-  const initialName = () => localStorage.getItem('name')
-  const [name, setName] = useState(initialName)
 
+const useLocalStorageState = (key) => {
+  // get item from local storage
+  const initialItem = () => localStorage.getItem(key)
+
+  // store item from local storage in state
+  const [item, setItem] = useState(initialItem)
+
+  // update local storage when there's a state change
   useEffect(() => {
-    localStorage.setItem('name', name)
-  }, [name])
+    localStorage.setItem(key, item)
+  }, [item, key])
+
+  return [item, setItem]
+
+}
+
+function Greeting() {
+  const [name, setName] = useLocalStorageState('name')
 
   function handleChange(event) {
     setName(event.target.value)
